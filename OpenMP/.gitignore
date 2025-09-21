@@ -1,0 +1,61 @@
+# Build artifacts
+*.o
+*.obj
+*.ko
+*.mod.c
+*.mod
+*.symvers
+*.elf
+*.bin
+*.hex
+*.map
+*.a
+*.lib
+*.so
+*.dll
+*.exe
+
+# Debugging and profiling
+*.dSYM/
+*.pdb
+*.ilk
+*.suo
+*.user
+*.ncb
+*.aps
+*.bsc
+*.sbr
+*.ipch/
+*.pch
+
+# Editor and IDE files (e.g., Visual Studio, VS Code, CLion)
+.vscode/
+.idea/
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.opensdf
+*.sdf
+*.VC.db
+*.VC.VC.opendb
+ipch/
+Debug/
+Release/
+x64/
+Win32/
+bin/
+obj/
+*.log
+*.bak
+*.swp
+*~
+# Other temporary files
+tmp/
+temp/
+
+# User-specific files
+.DS_Store
+Thumbs.db
+
+sim_anneal
