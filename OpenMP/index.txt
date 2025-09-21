@@ -1,1 +1,0 @@
-https://cp-algorithms.com/num_methods/simulated_annealing.html

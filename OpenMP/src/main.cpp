@@ -1,3 +1,8 @@
+/**
+ * https://cp-algorithms.com/num_methods/simulated_annealing.html
+ * 
+ */
+
 #include <iostream>
 #include "state.h"
 #include "sim_anneal.h"

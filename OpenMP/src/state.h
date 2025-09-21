@@ -1,3 +1,8 @@
+/**
+ * https://cp-algorithms.com/num_methods/simulated_annealing.html
+ * 
+ */
+
 #ifndef STATE_H
 #define STATE_H
 

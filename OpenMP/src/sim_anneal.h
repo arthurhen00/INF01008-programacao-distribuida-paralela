@@ -1,3 +1,8 @@
+/**
+ * https://cp-algorithms.com/num_methods/simulated_annealing.html
+ * 
+ */
+
 #ifndef SIM_ANNEAL_H
 #define SIM_ANNEAL_H
 
