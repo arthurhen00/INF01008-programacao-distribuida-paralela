@@ -86,9 +86,9 @@ int main(int argc, char** argv) {
 
     cout << "Length of shortest path found: " << E_best << "\n";
     cout << "Order of points in shortest path:\n";
-    for(auto x : best.points) {
-        cout << x.first << " " << x.second << "\n";
-    }
+    // for(auto x : best.points) {
+    //     cout << x.first << " " << x.second << "\n";
+    // }
 
     return 0;
 }
