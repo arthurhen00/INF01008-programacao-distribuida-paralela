@@ -4,6 +4,7 @@
  */
 
 #include <iostream>
+#include <omp.h>
 #include "state.h"
 #include "sim_anneal.h"
 

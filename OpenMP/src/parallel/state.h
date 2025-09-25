@@ -43,6 +43,7 @@ public:
     double E() {
         double dist = 0;
         int n = points.size();
+        #pragma omp parallel for reduction(+:dist)
         for(int i=0;i<n;i++)
             dist += euclidean(points[i], points[(i+1)%n]);
         return dist;
