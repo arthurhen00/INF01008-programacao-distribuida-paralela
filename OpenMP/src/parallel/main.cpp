@@ -11,9 +11,31 @@
 
 using namespace std;
 
-int main() {
+int main(int argc, char** argv) {
+    double initial_temperature = 100000;
+    double decay_rate = 0.998;
+    if (argc > 1 )
+    {
+        try {
+            initial_temperature = stod(argv[1]);
+        } catch (const std::invalid_argument& e) {
+            std::cerr << "Invalid number: " << argv[1] << ", expected a double" << std::endl;
+            return 1;
+        }
+    }
+
+    if (argc > 2 )
+    {
+        try {
+            decay_rate = stod(argv[2]);
+        } catch (const std::invalid_argument& e) {
+            std::cerr << "Invalid number: " << argv[2] << ", expected a double" << std::endl;
+            return 1;
+        }
+    }
+
     auto start = std::chrono::high_resolution_clock::now();
-    pair<double, state> res = simAnneal();
+    pair<double, state> res = simAnneal(initial_temperature, decay_rate);
     auto end = std::chrono::high_resolution_clock::now();
 
     std::chrono::duration<double, std::milli> elapsed = end - start;
@@ -22,7 +44,7 @@ int main() {
     state best = res.second;
 
     cout << "Execution time: " << elapsed.count() << " ms\n";
-    
+
     cout << "Length of shortest path found: " << E_best << "\n";
     cout << "Order of points in shortest path:\n";
     for(auto x : best.points) {

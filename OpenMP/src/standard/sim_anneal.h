@@ -24,20 +24,18 @@ bool P(double E, double E_next, double T, mt19937 &rng) {
     }
 }
 
-pair<double, state> simAnneal() {
+pair<double, state> simAnneal(double temperature = 10000, double decay_rate = 0.995) {
     state s;
     state best = s;
-    double T = 10000; // Initial temperature
-    double u = 0.995; // decay rate
     double E = s.E();
     double E_best = E;
 
     mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 
-    while(T > 1) {
+    while(temperature > 1) {
         state next = s.next();
         double E_next = next.E();
-        if(P(E, E_next, T, rng)) {
+        if(P(E, E_next, temperature, rng)) {
             s = next;
             E = E_next;
             if(E_next < E_best) {
@@ -45,7 +43,7 @@ pair<double, state> simAnneal() {
                 E_best = E_next;
             }
         }
-        T *= u;
+        temperature *= decay_rate;
     }
     return {E_best, best};
 }
