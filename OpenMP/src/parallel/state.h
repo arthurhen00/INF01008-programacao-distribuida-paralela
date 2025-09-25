@@ -26,6 +26,10 @@ public:
         points = {{0,0},{2,2},{0,2},{2,0},{0,1},{1,2},{2,1},{1,0}};
     }
 
+    state(const vector<pair<int,int>> &pts) {
+        points = pts;
+    }
+
     state next() {
         state s_next;
         s_next.points = points;

@@ -6,6 +6,7 @@
 #include <iostream>
 #include <omp.h>
 #include <chrono>
+#include <fstream>
 #include "state.h"
 #include "sim_anneal.h"
 
@@ -15,6 +16,8 @@ int main(int argc, char** argv) {
     int seed = 921;
     double initial_temperature = 100000;
     double decay_rate = 0.998;
+    string points_file;
+
     if (argc > 1 )
     {
         try {
@@ -45,8 +48,34 @@ int main(int argc, char** argv) {
         }
     }
 
+    if (argc > 4) {
+        points_file = argv[4];
+    }
+    
+    vector<pair<int,int>> input_points;
+    if (!points_file.empty()) {
+        ifstream in(points_file);
+        if (!in) {
+            cerr << "Could not open file: " << points_file << endl;
+            return 1;
+        }
+        int x, y;
+        while (in >> x >> y) {
+            input_points.emplace_back(x, y);
+        }
+        in.close();
+    }
+
     auto start = std::chrono::high_resolution_clock::now();
-    pair<double, state> res = simAnneal(initial_temperature, decay_rate, seed);
+    pair<double, state> res;
+
+    if (!input_points.empty()) {
+        state s(input_points);
+        res = simAnneal(initial_temperature, decay_rate, seed, s);
+    } else {
+        res = simAnneal(initial_temperature, decay_rate, seed);
+    }
+
     auto end = std::chrono::high_resolution_clock::now();
 
     std::chrono::duration<double, std::milli> elapsed = end - start;
@@ -58,9 +87,9 @@ int main(int argc, char** argv) {
 
     cout << "Length of shortest path found: " << E_best << "\n";
     cout << "Order of points in shortest path:\n";
-    for(auto x : best.points) {
-        cout << x.first << " " << x.second << "\n";
-    }
+    // for(auto x : best.points) {
+    //     cout << x.first << " " << x.second << "\n";
+    // }
 
     return 0;
 }
