@@ -59,3 +59,4 @@ temp/
 Thumbs.db
 
 sim_anneal
+sim_anneal_parallel
