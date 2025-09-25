@@ -11,6 +11,7 @@
 using namespace std;
 
 int main(int argc, char** argv) {
+    int seed = 921;
     double initial_temperature = 100000;
     double decay_rate = 0.998;
     if (argc > 1 )
@@ -33,8 +34,18 @@ int main(int argc, char** argv) {
         }
     }
 
+    if (argc > 3 )
+    {
+        try {
+            seed = stoi(argv[3]);
+        } catch (const std::invalid_argument& e) {
+            std::cerr << "Invalid number: " << argv[3] << ", expected a integer" << std::endl;
+            return 1;
+        }
+    }
+
     auto start = std::chrono::high_resolution_clock::now();
-    pair<double, state> res = simAnneal(initial_temperature, decay_rate);
+    pair<double, state> res = simAnneal(initial_temperature, decay_rate, seed);
     auto end = std::chrono::high_resolution_clock::now();
 
     std::chrono::duration<double, std::milli> elapsed = end - start;
