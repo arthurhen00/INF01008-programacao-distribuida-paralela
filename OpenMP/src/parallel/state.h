@@ -18,9 +18,7 @@ using namespace std;
 class state {
 public:
     vector<pair<int,int>> points;
-    mt19937 mt{ static_cast<mt19937::result_type>(
-        chrono::steady_clock::now().time_since_epoch().count()
-    )};
+    mt19937 mt{921};
 
     state() {
         points = {{0,0},{2,2},{0,2},{2,0},{0,1},{1,2},{2,1},{1,0}};
