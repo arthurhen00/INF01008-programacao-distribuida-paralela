@@ -1,13 +1,32 @@
 #!/bin/bash
-#SBATCH --job-name=test
+#SBATCH --job-name=sim_anneal_test
 #SBATCH --partition=hype
-#SBATCH --nodes=1
-#SBATCH --ntasks=2
+#SBATCH --ntasks=1
 #SBATCH --time=15:00
 #SBATCH --output=results/%x_%j.out
 #SBATCH --error=results/%x_%j.err
 
 make clean
 make
-./sim_anneal 9000000 0.999 919 > "results/normal.txt"
-./sim_anneal_parallel 9000000 0.999 919 > "results/parallel.txt"
+
+START_TEMP=9000000
+DECAY_RATE=0.999
+SEED=919
+
+mkdir -p inputs results
+
+for N in 100 1000 10000 100000
+do
+    INPUT_FILE="inputs/case_${N}.txt"
+
+    python generate_case.py $START_TEMP $DECAY_RATE $SEED $N $INPUT_FILE
+
+    for t in 1 2 4 8 16
+    do
+        export OMP_NUM_THREADS=$t
+        echo "Running with OMP_NUM_THREADS=$t on N=$N"
+
+        ./sim_anneal $INPUT_FILE > "results/normal_${t}_${N}.txt"
+        ./sim_anneal_parallel $INPUT_FILE > "results/parallel_${t}_${N}.txt"
+    done
+done
