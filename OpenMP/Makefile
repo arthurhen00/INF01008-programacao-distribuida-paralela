@@ -2,16 +2,14 @@ CXX = g++
 CXXFLAGS = -std=c++17 -O2 -Wall
 
 SRC_DIR = src
-STANDARD_DIR = standard
-PARALLEL_DIR = parallel
 DATA_DIR = data
 
-STANDARD_SRCS = $(SRC_DIR)/$(STANDARD_DIR)/main.cpp
-STANDARD_HEADERS = $(SRC_DIR)/$(STANDARD_DIR)/state.h $(SRC_DIR)/$(STANDARD_DIR)/sim_anneal.h
+STANDARD_SRCS = $(SRC_DIR)/main.cpp
+STANDARD_HEADERS = $(SRC_DIR)/state.h $(SRC_DIR)/sim_anneal.h
 STANDARD_TARGET = sim_anneal
 
-PARALLEL_SRCS = $(SRC_DIR)/$(PARALLEL_DIR)/main.cpp
-PARALLEL_HEADERS = $(SRC_DIR)/$(PARALLEL_DIR)/state.h $(SRC_DIR)/$(PARALLEL_DIR)/sim_anneal.h
+PARALLEL_SRCS = $(SRC_DIR)/main.cpp
+PARALLEL_HEADERS = $(SRC_DIR)/state.h $(SRC_DIR)/sim_anneal_parallel.h
 PARALLEL_TARGET = sim_anneal_parallel
 
 GENERATOR_SRC = $(SRC_DIR)/$(DATA_DIR)/super_generator_2000.cpp
