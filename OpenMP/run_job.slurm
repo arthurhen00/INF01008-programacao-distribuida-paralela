@@ -19,7 +19,7 @@ for N in 100 1000 10000 100000
 do
     INPUT_FILE="inputs/case_${N}.txt"
 
-    python generate_case.py $START_TEMP $DECAY_RATE $SEED $N $INPUT_FILE
+    python3 generate_case.py $START_TEMP $DECAY_RATE $SEED $N $INPUT_FILE
 
     for t in 1 2 4 8 16
     do
