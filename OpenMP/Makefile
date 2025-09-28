@@ -9,11 +9,8 @@ STANDARD_HEADERS = $(SRC_DIR)/state.h $(SRC_DIR)/sim_anneal.h
 STANDARD_TARGET = sim_anneal
 
 PARALLEL_SRCS = $(SRC_DIR)/main.cpp
-PARALLEL_HEADERS = $(SRC_DIR)/state.h $(SRC_DIR)/sim_anneal_parallel.h
+PARALLEL_HEADERS = $(SRC_DIR)/state_parallel.h $(SRC_DIR)/sim_anneal.h
 PARALLEL_TARGET = sim_anneal_parallel
-
-GENERATOR_SRC = $(SRC_DIR)/$(DATA_DIR)/super_generator_2000.cpp
-GENERATOR_TARGET = super_generator_2000
 
 all: $(STANDARD_TARGET) $(PARALLEL_TARGET)
 
@@ -26,14 +23,16 @@ $(PARALLEL_TARGET): $(PARALLEL_SRCS) $(PARALLEL_HEADERS)
 $(GENERATOR_TARGET): $(GENERATOR_SRC)
 	$(CXX) $(CXXFLAGS) $(GENERATOR_SRC) -o $(GENERATOR_TARGET)
 
-generate: $(GENERATOR_TARGET)
-	./$(GENERATOR_TARGET)
+generate: 
+	python generate_case.py 100000 0.998 921 100000 out.txt
 
-run: $(STANDARD_TARGET)
-	./$(STANDARD_TARGET) 100000 0.998 921 points.txt
+run: 
+	./$(STANDARD_TARGET) out.txt
 
-run_p: $(PARALLEL_TARGET)
-	./$(PARALLEL_TARGET) 100000 0.998 921 points.txt
+run_p: 
+	./$(PARALLEL_TARGET) out.txt
 
 clean:
-	rm -f $(STANDARD_TARGET) $(PARALLEL_TARGET) $(GENERATOR_TARGET) points.txt
+	rm -f $(STANDARD_TARGET) $(PARALLEL_TARGET) out.txt
+
+# export OMP_NUM_THREADS=
