@@ -48,4 +48,27 @@ pair<double, state> simAnneal(double temperature = 10000, double decay_rate = 0.
     return {E_best, best};
 }
 
+pair<double, state> simAnneal(double temperature, double decay_rate, unsigned int seed, state s) {
+    state best = s;
+    double E = s.E();
+    double E_best = E;
+
+    mt19937 rng(seed);
+
+    while (temperature > 1) {
+        state next = s.next();
+        double E_next = next.E();
+        if (P(E, E_next, temperature, rng)) {
+            s = next;
+            E = E_next;
+            if (E_next < E_best) {
+                best = s;
+                E_best = E_next;
+            }
+        }
+        temperature *= decay_rate;
+    }
+    return {E_best, best};
+}
+
 #endif
