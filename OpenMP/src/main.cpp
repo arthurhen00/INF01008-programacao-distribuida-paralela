@@ -6,9 +6,17 @@
 #include <iostream>
 #include <chrono>
 #include <fstream>
-#include "state.h"
-#include "sim_anneal.h"
+#include <omp.h>
 #include <bits/stdc++.h>
+
+#include "sim_anneal.h"
+
+#ifdef PARALLEL
+#include "state_parallel.h"
+#else
+#include "state.h"
+#endif
+
 using namespace std;
 
 struct Params {

@@ -6,12 +6,17 @@
 #ifndef SIM_ANNEAL_H
 #define SIM_ANNEAL_H
 
-#include "state.h"
 #include <random>
 #include <chrono>
 #include <cmath>
 #include <utility>
 #include <iostream>
+
+#ifdef PARALLEL
+#include "state_parallel.h"
+#else
+#include "state.h"
+#endif
 
 using namespace std;
 
@@ -47,4 +52,4 @@ pair<double, state> simAnneal(double temperature, double decay_rate, unsigned in
     return {E_best, best};
 }
 
-#endif
+#endif // SIM_ANNEAL_H

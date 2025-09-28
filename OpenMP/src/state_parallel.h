@@ -3,8 +3,8 @@
  * 
  */
 
-#ifndef STATE_H
-#define STATE_H
+#ifndef STATE_PARALLEL_H
+#define STATE_PARALLEL_H
 
 #include <vector>
 #include <cmath>
@@ -52,4 +52,4 @@ public:
     }
 };
 
-#endif
+#endif // STATE_PARALLEL_H

@@ -3,8 +3,8 @@
  * 
  */
 
-#ifndef STATE_H
-#define STATE_H
+#ifndef STATE_SERIAL_H
+#define STATE_SERIAL_H
 
 #include <vector>
 #include <cmath>
@@ -51,4 +51,4 @@ public:
     }
 };
 
-#endif
+#endif // STATE_SERIAL_H
