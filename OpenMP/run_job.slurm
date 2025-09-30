@@ -11,22 +11,27 @@ make
 
 START_TEMP=9000000
 DECAY_RATE=0.999
-SEED=919
+SEEDS=(919 1234 4321)
+FST_SEED=${SEEDS[0]}
 
 mkdir -p inputs results
 
 for N in 100 1000 10000 100000
 do
     INPUT_FILE="inputs/case_${N}.txt"
-
-    python3 generate_case.py $START_TEMP $DECAY_RATE $SEED $N $INPUT_FILE
-
-    for t in 1 2 4 8 16
+    python3 generate_case.py $START_TEMP $DECAY_RATE $FST_SEED $N $INPUT_FILE
+    for SEED in "${SEEDS[@]}"
     do
-        export OMP_NUM_THREADS=$t
-        echo "Running with OMP_NUM_THREADS=$t on N=$N"
 
-        ./sim_anneal $INPUT_FILE > "results/normal_${t}_${N}.txt"
-        ./sim_anneal_parallel $INPUT_FILE > "results/parallel_${t}_${N}.txt"
+        sed -i "3s/.*/seed=${SEED}/" "$INPUT_FILE"
+
+        for t in 1 2 4 8 16
+        do
+            export OMP_NUM_THREADS=$t
+            echo "Running with OMP_NUM_THREADS=$t on N=$N, SEED=$SEED"
+
+            ./sim_anneal $INPUT_FILE > "results/normal_SEED=${SEED}_INPUTS=${N}_THREADS=${t}.txt"
+            ./sim_anneal_parallel $INPUT_FILE > "results/parallel_SEED=${SEED}_INPUTS=${N}_THREADS=${t}.txt"
+        done
     done
 done
