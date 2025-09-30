@@ -4,11 +4,11 @@ CXXFLAGS = -std=c++17 -O2 -Wall
 SRC_DIR = src
 DATA_DIR = data
 
-STANDARD_SRCS = $(SRC_DIR)/main.cpp
+STANDARD_SRCS = $(SRC_DIR)/main.cpp $(SRC_DIR)/state.cpp $(SRC_DIR)/sim_anneal.cpp
 STANDARD_HEADERS = $(SRC_DIR)/state.h $(SRC_DIR)/sim_anneal.h
 STANDARD_TARGET = sim_anneal
 
-PARALLEL_SRCS = $(SRC_DIR)/main.cpp
+PARALLEL_SRCS = $(SRC_DIR)/main.cpp $(SRC_DIR)/state_parallel.cpp $(SRC_DIR)/sim_anneal.cpp
 PARALLEL_HEADERS = $(SRC_DIR)/state_parallel.h $(SRC_DIR)/sim_anneal.h
 PARALLEL_TARGET = sim_anneal_parallel
 
@@ -34,5 +34,5 @@ run_p:
 
 clean:
 	rm -f $(STANDARD_TARGET) $(PARALLEL_TARGET) out.txt
-
+	
 # export OMP_NUM_THREADS=

@@ -7,48 +7,20 @@
 #define STATE_SERIAL_H
 
 #include <vector>
-#include <cmath>
-#include <random>
-#include <chrono>
-#include <algorithm>
 #include <utility>
-
-using namespace std;
+#include <random>
 
 class state {
 public:
-    vector<pair<int,int>> points;
-    mt19937 mt{921};
+    std::vector<std::pair<int,int>> points;
+    std::mt19937 mt;
 
-    state() {
-        points = {{0,0},{2,2},{0,2},{2,0},{0,1},{1,2},{2,1},{1,0}};
-    }
+    state();
+    state(const std::vector<std::pair<int,int>> &pts);
 
-    state(const vector<pair<int,int>> &pts) {
-        points = pts;
-    }
-
-    state next() {
-        state s_next;
-        s_next.points = points;
-        uniform_int_distribution<> choose(0, points.size()-1);
-        int a = choose(mt);
-        int b = choose(mt);
-        swap(s_next.points[a], s_next.points[b]);
-        return s_next;
-    }
-
-    double euclidean(pair<int,int> a, pair<int,int> b) {
-        return hypot(a.first - b.first, a.second - b.second);
-    }
-
-    double E() {
-        double dist = 0;
-        int n = points.size();
-        for(int i=0;i<n;i++)
-            dist += euclidean(points[i], points[(i+1)%n]);
-        return dist;
-    }
+    state next();
+    double euclidean(std::pair<int,int> a, std::pair<int,int> b);
+    double E();
 };
 
 #endif // STATE_SERIAL_H
