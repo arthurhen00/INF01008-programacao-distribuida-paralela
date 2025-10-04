@@ -25,12 +25,13 @@ do
 
         sed -i "3s/.*/seed=${SEED}/" "$INPUT_FILE"
 
+        ./sim_anneal $INPUT_FILE > "results/normal_SEED=${SEED}_INPUTS=${N}.txt"
+
         for t in 1 2 4 8 16
         do
             export OMP_NUM_THREADS=$t
             echo "Running with OMP_NUM_THREADS=$t on N=$N, SEED=$SEED"
 
-            ./sim_anneal $INPUT_FILE > "results/normal_SEED=${SEED}_INPUTS=${N}_THREADS=${t}.txt"
             ./sim_anneal_parallel $INPUT_FILE > "results/parallel_SEED=${SEED}_INPUTS=${N}_THREADS=${t}.txt"
         done
     done
