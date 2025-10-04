@@ -1,4 +1,4 @@
-#include "state_parallel.h"
+#include "state.hpp"
 #include <cmath>
 #include <algorithm>
 #include <chrono>

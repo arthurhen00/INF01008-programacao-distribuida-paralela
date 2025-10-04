@@ -1,4 +1,4 @@
-#include "sim_anneal.h"
+#include "sim_anneal.hpp"
 #include <cmath>
 #include <iostream>
 

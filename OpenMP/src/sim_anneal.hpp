@@ -9,11 +9,7 @@
 #include <random>
 #include <utility>
 
-#ifdef PARALLEL
-#include "state_parallel.h"
-#else
-#include "state.h"
-#endif
+#include "state.hpp"
 
 bool P(double E, double E_next, double T, std::mt19937 &rng);
 

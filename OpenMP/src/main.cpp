@@ -9,13 +9,8 @@
 #include <omp.h>
 #include <bits/stdc++.h>
 
-#include "sim_anneal.h"
-
-#ifdef PARALLEL
-#include "state_parallel.h"
-#else
-#include "state.h"
-#endif
+#include "sim_anneal.hpp"
+#include "state.hpp"
 
 using namespace std;
 
