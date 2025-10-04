@@ -14,7 +14,7 @@ DECAY_RATE=0.999
 SEEDS=(919 1234 4321)
 FST_SEED=${SEEDS[0]}
 
-mkdir -p inputs results
+mkdir -p inputs results vtune
 
 for N in 100 1000 10000 100000
 do
@@ -31,8 +31,8 @@ do
         do
             export OMP_NUM_THREADS=$t
             echo "Running with OMP_NUM_THREADS=$t on N=$N, SEED=$SEED"
-
-            ./sim_anneal_parallel $INPUT_FILE > "results/parallel_SEED=${SEED}_INPUTS=${N}_THREADS=${t}.txt"
+            vtune -collect hpc-performance -result-dir vtune/SEED-${SEED}-INPUTS-${N}-THREADS=${t} -- ./sim_anneal_parallel $INPUT_FILE > "results/parallel_SEED=${SEED}_INPUTS=${N}_THREADS=${t}.txt"
+            #./sim_anneal_parallel $INPUT_FILE > "results/parallel_SEED=${SEED}_INPUTS=${N}_THREADS=${t}.txt"
         done
     done
 done
