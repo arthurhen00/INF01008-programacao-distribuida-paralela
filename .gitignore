@@ -2,3 +2,5 @@
 results
 inputs
 out.txt
+build
+*.d
