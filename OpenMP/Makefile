@@ -12,7 +12,7 @@ SEED_PARALLEL_TARGET = sim_anneal_seed_parallel
 # source files
 STANDARD_SRCS = $(SRC_DIR)/main.cpp $(SRC_DIR)/state.cpp $(SRC_DIR)/sim_anneal.cpp
 PARALLEL_SRCS = $(SRC_DIR)/main.cpp $(SRC_DIR)/state_parallel.cpp $(SRC_DIR)/sim_anneal.cpp
-SEED_PARALLEL_SRCS = $(SRC_DIR)/main_seed_parallel.cpp $(SRC_DIR)/state_parallel.cpp $(SRC_DIR)/sim_anneal.cpp   # >>> ADDED <<<
+SEED_PARALLEL_SRCS = $(SRC_DIR)/main_seed_parallel.cpp $(SRC_DIR)/state.cpp $(SRC_DIR)/sim_anneal.cpp
 
 # object files in separate dirs
 STD_BUILD = $(BUILD_DIR)/standard

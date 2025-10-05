@@ -94,7 +94,14 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    vector<int> seeds = {123, 456, 789, 1, 78}; 
+    vector<int> seeds(num_threads);
+    seeds[0] = params.seed;
+
+    std::mt19937 rng(seeds[0]);
+    std::uniform_int_distribution<int> dist(101, 998);
+    for (int i = 1; i < num_threads; i++) {
+        seeds[i] = dist(rng);
+    }
 
     #pragma omp parallel for
     for (int i = 0; i < (int)seeds.size(); i++) {
