@@ -30,7 +30,7 @@ done
 for N in 100 1000 10000
 do
     echo "Running sim_anneal on N=$N"
-    ./sim_anneal $INPUT_FILE
+    ./sim_anneal $INPUT_FILE $t
 done
 
 # -------------------------------
