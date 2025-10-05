@@ -67,13 +67,13 @@ Params parse_input(const string &filename) {
 }
 
 int main(int argc, char** argv) {
-    if (argc != 2) {
-        cerr << "Usage: " << argv[0] << " <input_file>\n";
+    if (argc != 3) {
+        cerr << "Usage: " << argv[0] << " <input_file> <num_threads>\n";
         return 1;
     }
 
     string input_file = argv[1];
-
+    int num_threads = stoi(argv[2]);
     Params params = parse_input(input_file);
 
     auto start = chrono::high_resolution_clock::now();
@@ -86,18 +86,13 @@ int main(int argc, char** argv) {
 
     string exe_name = argv[0];
     string output_dir = "results";
-    string cmd = "mkdir -p " + output_dir;
-    int ret = system(cmd.c_str());
-    if (ret != 0) {
-        cerr << "Warning: could not create results directory\n";
-        return 1;
-    }
 
     stringstream ss;
     ss << output_dir << "/" 
        << exe_name 
        << "_SEED_" << params.seed 
-       << "_INPUTS" << params.points.size() 
+       << "_INPUTS_" << params.points.size()
+       << "_THREADS_" << num_threads 
        << ".txt";
 
     string output_file = ss.str();
