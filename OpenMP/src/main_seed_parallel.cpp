@@ -73,16 +73,7 @@ int main(int argc, char** argv) {
     }
 
     string input_file = argv[1];
-
     Params params = parse_input(input_file);
-
-    auto start = chrono::high_resolution_clock::now();
-
-    state s(params.points, params.seed);
-    auto result = simAnneal(params.start_temp, params.decay_rate, params.seed, s);
-
-    auto end = chrono::high_resolution_clock::now();
-    chrono::duration<double, milli> elapsed = end - start;
 
     string exe_name = argv[0];
     string output_dir = "results";
@@ -96,8 +87,7 @@ int main(int argc, char** argv) {
     stringstream ss;
     ss << output_dir << "/" 
        << exe_name 
-       << "_SEED_" << params.seed 
-       << "_INPUTS" << params.points.size() 
+       << "_INPUTS_" << params.points.size() 
        << ".txt";
 
     string output_file = ss.str();
@@ -108,15 +98,33 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    out << "Seed=" << params.seed << "\n";
-    out << "Input_size=" << params.points.size() << "\n";
-    out << "Best_energy=" << result.first << "\n";
-    auto last = result.second.points.back();
-    auto fst = result.second.points.front();
-    out << "First_point=(" << fst.first << ", " << fst.second << ")\n";
-    out << "Last_point=(" << last.first << ", " << last.second << ")\n";
-    out << "Execution_time_(ms)=" << elapsed.count() << "\n";
-    out << "---------------------------\n";
+    vector<int> seeds = {123, 456, 789, 1, 78}; 
+
+    #pragma omp parallel for
+    for (int i = 0; i < (int)seeds.size(); i++) {
+        int seed = seeds[i];
+
+        auto start = chrono::high_resolution_clock::now();
+
+        state s(params.points, seed);
+        auto result = simAnneal(params.start_temp, params.decay_rate, seed, s);
+
+        auto end = chrono::high_resolution_clock::now();
+        chrono::duration<double, milli> elapsed = end - start;
+
+        #pragma omp critical
+        {
+            out << "Seed=" << seed << "\n";
+            out << "Input_size=" << params.points.size() << "\n";
+            out << "Best_energy=" << result.first << "\n";
+            auto last = result.second.points.back();
+            auto fst = result.second.points.front();
+            out << "First_point=(" << fst.first << ", " << fst.second << ")\n";
+            out << "Last_point=(" << last.first << ", " << last.second << ")\n";
+            out << "Execution_time_(ms)=" << elapsed.count() << "\n";
+            out << "---------------------------\n";
+        }
+    }
 
     out.close();
 

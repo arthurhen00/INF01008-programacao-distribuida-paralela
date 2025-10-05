@@ -60,4 +60,5 @@ Thumbs.db
 
 sim_anneal
 sim_anneal_parallel
+sim_anneal_seed_parallel
 super_generator_2000

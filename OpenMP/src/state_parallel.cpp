@@ -10,6 +10,9 @@ state::state() : mt(921) {
 
 state::state(const std::vector<std::pair<int,int>> &pts) : points(pts), mt(921) {}
 
+state::state(const std::vector<std::pair<int,int>> &pts, unsigned int seed)
+    : points(pts), mt(seed) {}
+
 state state::next() {
     state s_next;
     s_next.points = points;

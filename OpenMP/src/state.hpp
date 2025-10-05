@@ -17,6 +17,7 @@ public:
 
     state();
     state(const std::vector<std::pair<int,int>> &pts);
+    state(const std::vector<std::pair<int,int>> &pts, unsigned int seed);
 
     state next();
     double euclidean(std::pair<int,int> a, std::pair<int,int> b);
