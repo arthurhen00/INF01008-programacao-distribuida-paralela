@@ -27,7 +27,7 @@ do
 
         ./sim_anneal $INPUT_FILE > "results/normal_SEED=${SEED}_INPUTS=${N}.txt"
 
-        for t in 1 2 4 8 16
+        for t in 1 3 5 10 20
         do
             export OMP_NUM_THREADS=$t
             echo "Running with OMP_NUM_THREADS=$t on N=$N, SEED=$SEED"
