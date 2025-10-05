@@ -92,7 +92,7 @@ int main(int argc, char** argv) {
        << exe_name 
        << "_SEED_" << params.seed 
        << "_INPUTS_" << params.points.size()
-       << "_THREADS_" << num_threads 
+       << "_THREADS_" << std::setw(2) << std::setfill('0') << num_threads 
        << ".txt";
 
     string output_file = ss.str();
