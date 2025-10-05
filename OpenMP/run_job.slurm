@@ -16,11 +16,10 @@ SEED=919
 mkdir -p inputs results vtune
 
 # -------------------------------
-# Loop 1: inputs
+# Loop 0: inputs
 # -------------------------------
 for N in 100 1000 10000
 do
-    INPUT_FILE="inputs/case_${N}.txt"
     python3 generate_case.py $START_TEMP $DECAY_RATE $SEED $N $INPUT_FILE
 done
 
@@ -29,6 +28,7 @@ done
 # -------------------------------
 for N in 100 1000 10000
 do
+    INPUT_FILE="inputs/case_${N}.txt"
     echo "Running sim_anneal on N=$N"
     ./sim_anneal $INPUT_FILE 1
 done
