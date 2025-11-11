@@ -11,7 +11,7 @@ N=2048
 
 mkdir -p logs
 
-MACHINEFILE="nodes.$SLURM_JOB_ID"
+MACHINEFILE="logs/nodes.$SLURM_JOB_ID"
 srun -l hostname | sort -n | awk '{print $2}' > $MACHINEFILE
 
 mpirun -np $SLURM_NTASKS \
