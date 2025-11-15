@@ -26,13 +26,13 @@ int main(int argc, char* argv[]) {
         initialize_matrices(n, A, B, C);
     }
 
-    double t1, t2;
-    if(rank == 0)
-	    t1 = MPI_Wtime();
-
-
+    double t_local_comm = 0.0;
+    double t_total_start = MPI_Wtime();
+    
     double* local_A = (double*)malloc((n * n / size) * sizeof(double));
     double* local_C = (double*)malloc((n * n / size) * sizeof(double));
+
+    double t_scatter_start = MPI_Wtime();
 
     if (rank == 0) {
         for (int i = 1; i < size; i++) {
@@ -45,7 +45,14 @@ int main(int argc, char* argv[]) {
         MPI_Recv(local_A, n * n / size, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
     }
 
+    t_local_comm += (MPI_Wtime() - t_scatter_start);
+
+    double t_bcast_start = MPI_Wtime();
     MPI_Bcast(B, n * n, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    t_local_comm += (MPI_Wtime() - t_bcast_start );
+
+
+    double comp_start = MPI_Wtime();
 
     for (int i = 0; i < n / size; i++) {
         for (int j = 0; j < n; j++) {
@@ -55,6 +62,10 @@ int main(int argc, char* argv[]) {
             }
         }
     }
+    double t_comp_end = MPI_Wtime();
+    double t_local_comp = t_comp_end - comp_start;
+
+    double t_gather_start = MPI_Wtime();
 
     if (rank == 0) {
         for (int i = 0; i < n * n / size; i++) {
@@ -67,11 +78,22 @@ int main(int argc, char* argv[]) {
         MPI_Send(local_C, n * n / size, MPI_DOUBLE, 0, 1, MPI_COMM_WORLD);
     }
 
-   if(rank == 0){
-	t2 = MPI_Wtime();
-	printf("Execution time: %.6f\n", t2 - t1);
-   }
+    t_local_comm += (MPI_Wtime()- t_gather_start);
 
+    t_total_end = MPI_Wtime();
+    double t_local_total  = t_total_end - t_total_start;
+
+    double total_time, comm_time, comp_time;
+
+    MPI_Reduce(&t_local_total, &total_time, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&t_local_comm, &comm_time, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&t_local_comp, &comp_time, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+
+    if (rank == 0) {
+        printf("n,size,total,comm,comp\n");
+        printf("%d,%d,%.6f,%.6f,%.6f\n",
+            n, size, total_time, comm_time, comp_time);
+    }
 
 /*    if (rank == 0) {
         printf("Result Matrix:\n");

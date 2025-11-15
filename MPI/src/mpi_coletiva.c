@@ -29,14 +29,19 @@ int main(int argc, char* argv[]) {
     double* local_A = (double*)malloc((n * n / size) * sizeof(double));
     double* local_C = (double*)malloc((n * n / size) * sizeof(double));
 
-    double t1, t2;
-    if(rank == 0)
-	    t1 = MPI_Wtime();
+    double t_total_start = MPI_Wtime();
+    double t_comm = 0.0;
+    double t_comp = 0.0;
 
-
+    double t_scatter = MPI_Wtime();
     MPI_Scatter(A, n * n / size, MPI_DOUBLE, local_A, n * n / size, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-    MPI_Bcast(B, n * n, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    t_comm += MPI_Wtime() - t_scatter;
 
+    double t_bcast = MPI_Wtime();
+    MPI_Bcast(B, n * n, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    t_comm += MPI_Wtime() - t_bcast;
+
+    double t_comp_start = MPI_Wtime();
     for (int i = 0; i < n / size; i++) {
         for (int j = 0; j < n; j++) {
             local_C[i * n + j] = 0.0;
@@ -45,12 +50,24 @@ int main(int argc, char* argv[]) {
             }
         }
     }
+    t_comp = MPI_Wtime() - t_comp_start;
 
+    double t_gather = MPI_Wtime();
     MPI_Gather(local_C, n * n / size, MPI_DOUBLE, C, n * n / size, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    t_comm += MPI_Wtime() - t_gather;
+
+    double t_total = MPI_Wtime() - t_total_start;
+
+    double total_time, comm_time, comp_time;
+
+    MPI_Reduce(&t_total, &total_time, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&t_comm, &comm_time, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&t_comp, &comp_time, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
 
     if(rank == 0){
-	    t2 = MPI_Wtime();
-	    printf("Execution time: %.6f\n", t2 - t1);
+	    printf("n,size,total_time,comm_time,comp_time\n");
+        printf("%d,%d,%.6f,%.6f,%.6f\n",
+            n, size, total_time, comm_time, comp_time);
     }
 
 /*    if (rank == 0) {

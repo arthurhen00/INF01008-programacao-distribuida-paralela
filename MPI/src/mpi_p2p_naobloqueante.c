@@ -31,10 +31,11 @@ int main(int argc, char* argv[]) {
 
     MPI_Request request;
 
-    double t1, t2;
-    if(rank == 0)
-	    t1 = MPI_Wtime();
+    double t_local_comm = 0.0;
+    double t_local_comp = 0.0;
+    double t_total_start = MPI_Wtime();
 
+    double t_scatter = MPI_Wtime();
     if (rank == 0) {
         for (int i = 1; i < size; i++) {
             MPI_Isend(A + i * (n * n / size), n * n / size, MPI_DOUBLE, i, 0, MPI_COMM_WORLD, &request);
@@ -46,10 +47,14 @@ int main(int argc, char* argv[]) {
         MPI_Irecv(local_A, n * n / size, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD, &request);
         MPI_Wait(&request, MPI_STATUS_IGNORE);
     }
+    t_local_comm += (MPI_Wtime() - t_scatter);
 
+    double t_bcast = MPI_Wtime();
     MPI_Ibcast(B, n * n, MPI_DOUBLE, 0, MPI_COMM_WORLD, &request);
     MPI_Wait(&request, MPI_STATUS_IGNORE);
+    t_local_comm += (MPI_Wtime() - t_bcast);
 
+    double t_comp_start = MPI_Wtime();
     for (int i = 0; i < n / size; i++) {
         for (int j = 0; j < n; j++) {
             local_C[i * n + j] = 0.0;
@@ -58,7 +63,9 @@ int main(int argc, char* argv[]) {
             }
         }
     }
+    t_local_comp = MPI_Wtime() - t_comp_start;
 
+    double t_gather = MPI_Wtime();
     if (rank == 0) {
         for (int i = 0; i < n * n / size; i++) {
             C[i] = local_C[i];
@@ -71,12 +78,20 @@ int main(int argc, char* argv[]) {
         MPI_Isend(local_C, n * n / size, MPI_DOUBLE, 0, 1, MPI_COMM_WORLD, &request);
         MPI_Wait(&request, MPI_STATUS_IGNORE);
     }
+    t_local_comm += (MPI_Wtime() - t_gather);
+    
+    double local_total = MPI_Wtime() - t_total_start;
 
-    if(rank == 0){
-	t2 = MPI_Wtime();
-	printf("Execution time: %.6f\n", t2-t1);
+    double total_time, comm_time, comp_time;
+
+    MPI_Reduce(&local_total, &total_time, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&local_comm, &comm_time, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&local_comp, &comp_time, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+
+    if (rank == 0) {
+        printf("n,size,total_time,comm_time,comp_time\n");
+        printf("%d,%d,%.6f,%.6f,%.6f\n", n, size, total_time, comm_time, comp_time);
     }
-
 /*
     if (rank == 0) {
         printf("Result Matrix:\n");
