@@ -80,7 +80,7 @@ int main(int argc, char* argv[]) {
 
     t_local_comm += (MPI_Wtime()- t_gather_start);
 
-    t_total_end = MPI_Wtime();
+    double t_total_end = MPI_Wtime();
     double t_local_total  = t_total_end - t_total_start;
 
     double total_time, comm_time, comp_time;
