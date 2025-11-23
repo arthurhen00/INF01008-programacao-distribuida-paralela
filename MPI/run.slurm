@@ -49,6 +49,8 @@ mkdir -p logs
 
 echo "program,procs,n,time_total_sec" > results.csv
 
+REP_COUNT=5
+
 for ((i=0; i<${#BIN_LIST[@]}; i++)); do
     PROGRAM=${BIN_LIST[$i]}
 
@@ -57,17 +59,17 @@ for ((i=0; i<${#BIN_LIST[@]}; i++)); do
 
             echo "Running $PROGRAM with P=$P N=$N"
 
-            mpirun -np $SLURM_NTASKS \
-              -machinefile $MACHINEFILE \
-              --mca btl ^openib \
-              --mca btl_tcp_if_include eno2 \
-              --bind-to none -np $SLURM_NTASKS \
-              ./$PROGRAM $N 
-              | grep "^CSV" \
-              | sed "s/^CSV,//" \
-              >> results.csv
-
-            mpirun -np $P --bind-to core --map-by core  \
+            for R in $(seq 1 $REP_COUNT); do
+                mpirun -np $P \
+                  -machinefile $MACHINEFILE \
+                  --mca btl ^openib \
+                  --mca btl_tcp_if_include eno2 \
+                  --bind-to none \
+                  ./$PROGRAM $N 
+                  | grep "^CSV" \
+                  | sed "s/^CSV,//" \
+                  >> results.csv
+            done
         done
     done
 done
