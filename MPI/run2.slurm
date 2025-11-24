@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=mpi_coletiva_ag
+#SBATCH --job-name=mpi_coletiva_ag_2
 #SBATCH --partition=hype
 #SBATCH --nodes=2
 #SBATCH --ntasks=40
@@ -22,20 +22,19 @@ BIN_LIST=(
 )
 
 SIZES=(
-       512 
-       1024 
-       2048
+#       512 
+#       1024 
+#       2048
        4096
-       8192
        )
 
 PROCS=(
-       1 
-       2 
-       4
-       5 
-       10 
-       20 
+#       1 
+#       2 
+#       4
+#       5 
+#       10 
+#       20 
        40
        )
 
@@ -49,7 +48,7 @@ done
 
 mkdir -p logs
 
-echo "program,procs,n,time_total_sec" > results.csv
+echo "program,procs,n,time_total_sec" > results_2.csv
 
 REP_COUNT=5
 
@@ -70,7 +69,7 @@ for ((i=0; i<${#BIN_LIST[@]}; i++)); do
                   ./$PROGRAM $N \
                   | grep "^CSV" \
                   | sed "s/^CSV,//" \
-                  >> results.csv
+                  >> results_2.csv
             done
         done
     done
