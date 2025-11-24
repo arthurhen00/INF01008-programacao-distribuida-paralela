@@ -73,7 +73,5 @@ for ((i=0; i<${#BIN_LIST[@]}; i++)); do
                   >> results.csv
             done
         done
-    done
+    done
 done
-
-
