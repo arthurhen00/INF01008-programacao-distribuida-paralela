@@ -7,7 +7,7 @@
 #SBATCH --output=logs/%x_%j.out
 #SBATCH --error=logs/%x_%j.err
 
-N=2048
+SRC_DIR="src"
 
 SRC_LIST=(
     "mpi_coletiva.c"
@@ -23,18 +23,20 @@ BIN_LIST=(
 
 SIZES=(
        512 
-#       1024 
-#       2048
+       1024 
+       2048
+       4096
+       8192
        )
 
 PROCS=(
-#       1 
-#       2 
-#       4
+       1 
+       2 
+       4
        5 
-#       10 
-#       20 
-#       40
+       10 
+       20 
+       40
        )
 
 MACHINEFILE="logs/nodes.$SLURM_JOB_ID"
@@ -42,7 +44,7 @@ srun -l hostname | sort -n | awk '{print $2}' > $MACHINEFILE
 
 echo "Compiling source files..."
 for ((i=0; i<${#SRC_LIST[@]}; i++)); do
-    mpicc -O3 -march=native -o ${BIN_LIST[$i]} ${SRC_LIST[$i]}
+    mpicc -O3 -march=native -o ${BIN_LIST[$i]} $SRC_DIR/${SRC_LIST[$i]}
 done
 
 mkdir -p logs
@@ -65,7 +67,7 @@ for ((i=0; i<${#BIN_LIST[@]}; i++)); do
                   --mca btl ^openib \
                   --mca btl_tcp_if_include eno2 \
                   --bind-to none \
-                  ./$PROGRAM $N 
+                  ./$PROGRAM $N \
                   | grep "^CSV" \
                   | sed "s/^CSV,//" \
                   >> results.csv
