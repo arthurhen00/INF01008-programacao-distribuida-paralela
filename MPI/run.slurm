@@ -1,9 +1,9 @@
 #!/bin/bash
-#SBATCH --job-name=mpi_coletiva
+#SBATCH --job-name=mpi_coletiva_ag
 #SBATCH --partition=hype
 #SBATCH --nodes=2
 #SBATCH --ntasks=40
-#SBATCH --time=2:00:00
+#SBATCH --time=6:00:00
 #SBATCH --output=logs/%x_%j.out
 #SBATCH --error=logs/%x_%j.err
 
