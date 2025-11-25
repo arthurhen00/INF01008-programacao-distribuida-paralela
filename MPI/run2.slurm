@@ -48,8 +48,6 @@ done
 
 mkdir -p logs
 
-echo "program,procs,n,time_total_sec" > results_2.csv
-
 REP_COUNT=5
 
 for ((i=0; i<${#BIN_LIST[@]}; i++)); do
@@ -61,13 +59,16 @@ for ((i=0; i<${#BIN_LIST[@]}; i++)); do
             echo "Running $PROGRAM with P=$P N=$N"
 
             for R in $(seq 1 $REP_COUNT); do
+
+                OUTFILE="${PROGRAM}_${R}_results_2.csv"
+
                 mpirun -np $P \
                   -machinefile $MACHINEFILE \
                   --mca btl ^openib \
                   --mca btl_tcp_if_include eno2 \
                   --bind-to none \
                   ./$PROGRAM $N \
-                  >> results_2.csv
+                  >> "$OUTFILE"
             done
         done
     done
