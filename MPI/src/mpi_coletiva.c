@@ -60,14 +60,10 @@ int main(int argc, char* argv[]) {
 
     double total_time, comm_time, comp_time;
 
-    MPI_Reduce(&t_total, &total_time, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
-    MPI_Reduce(&t_comm, &comm_time, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
-    MPI_Reduce(&t_comp, &comp_time, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
-
     if(rank == 0){
 	    printf("n,size,total_time,comm_time,comp_time\n");
         printf("%d,%d,%.6f,%.6f,%.6f\n",
-            n, size, total_time, comm_time, comp_time);
+            n, size, t_total, t_comm, t_comp);
     }
 
 /*    if (rank == 0) {
