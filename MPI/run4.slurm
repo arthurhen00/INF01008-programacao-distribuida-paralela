@@ -60,7 +60,7 @@ for ((i=0; i<${#BIN_LIST[@]}; i++)); do
 
             for R in $(seq 1 $REP_COUNT); do
 
-                OUTFILE="${PROGRAM}_${R}_results_4.csv"
+                OUTFILE="${PROGRAM}_results_4.csv"
 
                 mpirun -np $P \
                   -machinefile $MACHINEFILE \
