@@ -67,8 +67,6 @@ for ((i=0; i<${#BIN_LIST[@]}; i++)); do
                   --mca btl_tcp_if_include eno2 \
                   --bind-to none \
                   ./$PROGRAM $N \
-                  | grep "^CSV" \
-                  | sed "s/^CSV,//" \
                   >> results_4.csv
             done
         done
