@@ -25,7 +25,7 @@ SIZES=(
        512 
        1024 
        2048
-#       4096
+       4096
        )
 
 PROCS=(
@@ -33,9 +33,11 @@ PROCS=(
 #       2 
 #       4
 #       5 
-       10 
-       20 
+#       10 
+#       20 
        40
+#       60
+#       80
        )
 
 MACHINEFILE="logs/nodes.$SLURM_JOB_ID"
