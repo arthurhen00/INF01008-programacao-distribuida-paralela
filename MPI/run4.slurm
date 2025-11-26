@@ -2,7 +2,7 @@
 #SBATCH --job-name=mpi_coletiva_ag_4
 #SBATCH --partition=hype
 #SBATCH --nodes=4
-#SBATCH --ntasks=80
+#SBATCH --ntasks=160
 #SBATCH --time=6:00:00
 #SBATCH --output=logs/%x_%j.out
 #SBATCH --error=logs/%x_%j.err
@@ -29,15 +29,7 @@ SIZES=(
        )
 
 PROCS=(
-#       1 
-#       2 
-#       4
-#       5 
-#       10 
-#       20 
-#       40
-#       60
-        80
+       160
        )
 
 MACHINEFILE="logs/nodes.$SLURM_JOB_ID"
